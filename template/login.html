@@ -1,0 +1,195 @@
+{% extends "base.html" %}
+{% block head %}
+    <!-- Font Icon -->
+    <link rel="stylesheet" href="/static/fonts/material-icon/css/material-design-iconic-font.min.css">
+    <!-- Main css -->
+   <link rel="stylesheet" href="/static/auth/css/style.css">
+<style>
+   <style>
+    body {
+        background-color: #121212;
+        color: #e0e0e0;
+    }
+
+    .main {
+        padding: 0;
+        margin: 0;
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .container {
+        background-color: #1e1e1e;
+        border-radius: 10px;
+        width: 65%;
+        max-width: 900px;
+        box-shadow: 0 0 25px rgba(0, 0, 0, 0.6);
+        padding: 40px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .signin-content {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        align-items: center;
+        width: 100%;
+    }
+
+    .signin-image {
+        flex: 1;
+        text-align: center;
+        padding: 20px;
+    }
+
+    .signin-image img {
+        width: 85%;
+        max-width: 380px;
+        height: auto;
+        border-radius: 10px;
+        box-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
+    }
+
+    .signup-image-link {
+        display: inline-block;
+        margin-top: 15px;
+        color: #76c7c0;
+        text-decoration: none;
+        font-weight: 500;
+    }
+
+    .signup-image-link:hover {
+        text-decoration: underline;
+    }
+
+    .signin-form {
+        flex: 1;
+        padding: 20px 30px;
+    }
+
+    .form-title {
+        color: #ffffff;
+        text-align: center;
+        margin-bottom: 25px;
+        font-size: 26px;
+        font-weight: 600;
+    }
+
+    label {
+        color: #bbb;
+    }
+
+    input[type="email"],
+    input[type="password"] {
+        background: #2c2c2c;
+        border: 1px solid #444;
+        border-radius: 5px;
+        color: #f5f5f5;
+        padding: 10px 15px;
+        width: 100%;
+        margin-bottom: 15px;
+        transition: border-color 0.3s;
+    }
+
+    input[type="email"]:focus,
+    input[type="password"]:focus {
+        border-color: #76c7c0;
+        outline: none;
+    }
+
+    .form-submit {
+        background: linear-gradient(45deg, #76c7c0, #4e9d91);
+        color: #fff;
+        border: none;
+        border-radius: 25px;
+        padding: 10px 25px;
+        cursor: pointer;
+        font-size: 16px;
+        width: 100%;
+        transition: background 0.3s, transform 0.2s;
+    }
+
+    .form-submit:hover {
+        background: linear-gradient(45deg, #4e9d91, #76c7c0);
+        transform: scale(1.03);
+    }
+
+    .alert {
+        text-align: center;
+        padding: 8px;
+        border-radius: 5px;
+    }
+
+    .alert.error {
+        background-color: #ff4c4c;
+        color: #fff;
+    }
+
+    .alert.success {
+        background-color: #4caf50;
+        color: #fff;
+    }
+
+    .nav-link {
+        color: #ccc !important;
+    }
+
+    @media (max-width: 768px) {
+        .container {
+            flex-direction: column;
+            width: 90%;
+            padding: 20px;
+        }
+        .signin-image img {
+            width: 100%;
+        }
+    }
+</style>
+{% endblock %}
+{% block content %}
+    <div class="main">
+        <!-- Sing in  Form -->
+        <section class="sign-in" style="padding-top:100px;">>
+            <div class="container">
+                <div class="signin-content">
+                    <div class="signin-image">
+                        <figure><img src="/static/auth/images/signin-image.jpeg" alt="sing up image"></figure>
+                        <a href="{% url 'register' %}" class="signup-image-link">Create an account</a>
+                    </div>
+
+                    <div class="signin-form">
+                        <h2 class="form-title">Sign in</h2>
+                        <form method="POST" class="register-form" id="login-form">
+                            {% csrf_token %}
+                            {% if message %}
+                                <div class="form-group">
+                                    <p class="alert {{class}}">{{message}}</p>
+                                </div>
+                            {% endif %}
+                            <div class="form-group">
+                                <label for="your_name"><i class="zmdi zmdi-account material-icons-name"></i></label>
+                                <input type="email" name="email" id="your_name" placeholder="Your Email" required/>
+                            </div>
+                            <div class="form-group">
+                                <label for="your_pass"><i class="zmdi zmdi-lock"></i></label>
+                                <input type="password" name="password" id="your_pass" placeholder="Password" required/>
+                            </div>
+                            <div class="form-group form-button">
+                                <input type="submit" name="signin" id="signin" class="form-submit" value="Log in"/>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- JS -->
+    <script src="vendor/jquery/jquery.min.js"></script>
+    <script src="js/main.js"></script>
+
+{% endblock %}

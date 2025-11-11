@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+{% extends "base.html" %}
+{% block head %}
+<link rel="stylesheet" href="/static/fonts/material-icon/css/material-design-iconic-font.min.css">
+<link rel="stylesheet" href="/static/auth/css/style.css">
+<style>
+    body {
+        background: linear-gradient(135deg, #000000ff, #181818ff);
+        font-family: 'Poppins', sans-serif;
+    }
+
+    .main {
+        padding: 0;
+        margin: 0;
+    }
+
+    .container {
+        background-color: #090909ff;
+        width: 65%;
+        margin: 60px auto;
+        border-radius: 20px;
+        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+        transition: all 0.3s ease;
+    }
+
+    .container:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 12px 35px rgba(0, 0, 0, 0.15);
+    }
+
+    .signup-content {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-wrap: wrap;
+    }
+
+    .signup-form {
+        flex: 1 1 50%;
+        padding: 40px 50px;
+    }
+
+    .signup-form h2 {
+        color: #2e7d32;
+        font-weight: 700;
+        margin-bottom: 25px;
+        text-align: center;
+    }
+
+    .form-group {
+        position: relative;
+        margin-bottom: 20px;
+    }
+
+    .form-group input {
+        width: 100%;
+        padding: 12px 40px 12px 15px;
+        border: 1px solid #c8e6c9;
+        border-radius: 10px;
+        background-color: #f4f4f4ff;
+        outline: none;
+        transition: all 0.3s ease;
+    }
+
+    .form-group input:focus {
+        border-color: #81c784;
+        box-shadow: 0 0 5px rgba(129, 199, 132, 0.5);
+        background: #f0eaeaff;
+    }
+
+    .form-group label i {
+        position: absolute;
+        right: 15px;
+        top: 12px;
+        color: #81c784;
+    }
+
+    .form-submit {
+        background: linear-gradient(90deg, #66bb6a, #43a047);
+        color: white;
+        padding: 12px;
+        border: none;
+        width: 100%;
+        border-radius: 10px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+    .form-submit:hover {
+        background: linear-gradient(90deg, #43a047, #2e7d32);
+        transform: translateY(-2px);
+    }
+
+    .signup-image {
+        flex: 1 1 50%;
+        text-align: center;
+        background: #040404ff;
+        padding: 20px;
+    }
+
+    .signup-image img {
+        width: 100%;
+        height: auto;
+        border-radius: 10px;
+        object-fit: cover;
+    }
+
+    .signup-image-link {
+        display: inline-block;
+        margin-top: 20px;
+        color: #2e7d32;
+        text-decoration: none;
+        font-weight: 600;
+        transition: color 0.3s ease;
+    }
+
+    .signup-image-link:hover {
+        color: #1b5e20;
+        text-decoration: underline;
+    }
+
+    #msz small {
+        color: red;
+    }
+
+    @media (max-width: 768px) {
+        .container {
+            width: 90%;
+        }
+
+        .signup-content {
+            flex-direction: column;
+        }
+
+        .signup-image {
+            order: -1;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+{% if status %}
+<script>alert('{{ status }}');</script>
+{% endif %}
+{% if error %}
+<script>alert('{{ error }}');</script>
+{% endif %}
+
+<div class="main">
+    <section class="signup">
+        <div class="container">
+            <div class="signup-content">
+                <!-- Signup Form -->
+                <div class="signup-form">
+                    <h2 class="form-title">Create Account</h2>
+                    <form method="POST" class="register-form" action="">
+                        {% csrf_token %}
+                        <div id="msz"></div>
+
+                        <div class="form-group">
+                            <label for="name"><i class="zmdi zmdi-account"></i></label>
+                            <input type="text" name="name" id="name" placeholder="Your Name" required />
+                        </div>
+
+                        <div class="form-group">
+                            <label for="email"><i class="zmdi zmdi-email"></i></label>
+                            <input type="email" name="email" id="email" placeholder="Your Email" required onkeyup="check_email()" />
+                        </div>
+
+                        <div class="form-group">
+                            <label for="pass"><i class="zmdi zmdi-lock"></i></label>
+                            <input type="password" name="pass" id="pass" placeholder="Password" required onkeyup="checkPass()" />
+                        </div>
+
+                        <div class="form-group">
+                            <label for="re_pass"><i class="zmdi zmdi-lock-outline"></i></label>
+                            <input type="password" name="re_pass" id="re_pass" placeholder="Repeat your password" required onkeyup="checkPass()" />
+                        </div>
+
+                        <div class="form-group">
+                            <label for="number"><i class="zmdi zmdi-phone"></i></label>
+                            <input type="text" name="number" id="number" placeholder="Contact Number" pattern="[0-9]{10}" title="Number must contain 10 digits only!" required />
+                        </div>
+
+                        <div class="form-group form-button">
+                            <input type="submit" name="signup" id="signup" class="form-submit" value="Register" />
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Signup Image -->
+                <div class="signup-image">
+                    <img src="/static/auth/images/signup-image.jpeg" alt="sign up image">
+                    <a href="{% url 'login' %}" class="signup-image-link">Already have an account?</a>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+{% endblock %}
+
+{% block script %}
+<script>
+    function checkPass() {
+        var p = $('#pass').val();
+        var cp = $('#re_pass').val();
+        if (p === cp) {
+            $("#signup").attr('disabled', false).css({ 'background': 'linear-gradient(90deg,#66bb6a,#43a047)' });
+            $('#msz').html('');
+        } else {
+            $("#signup").attr('disabled', true).css({ 'background': 'red' });
+            $('#msz').html("<small>Password didn't match!</small>");
+        }
+    }
+
+    function check_email() {
+        var email = document.getElementById('email').value;
+        $.ajax({
+            url: '{% url "check_user_exist" %}',
+            type: 'get',
+            data: { usern: email },
+            success: function (data) {
+                if (data.status == 0) {
+                    $("#signup").attr('disabled', false).css({ 'background': 'linear-gradient(90deg,#66bb6a,#43a047)' });
+                    $('#msz').html('');
+                } else {
+                    $("#signup").attr('disabled', true).css({ 'background': 'red' });
+                    $('#msz').html("<small>" + data.message + "</small>");
+                }
+            }
+        })
+    }
+</script>
+{% endblock %}
